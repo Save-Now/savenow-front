@@ -10,6 +10,11 @@ function App() {
         setHello(res.data);
       }, []);
   })
+  .catch((error) => {
+    // 에러 처리 추가
+    console.error("Error:", error)
+  }, []); // 의존성 배열을 여기로 이동
+  
   return (
     <>
     <SignUp/>
