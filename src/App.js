@@ -5,7 +5,6 @@ import MyPage from "./pages/MyPage";
 
 function App() {
   const [hello, setHello] = useState("");
-
   useEffect(() => {
     axios
       .get("http://localhost:8080/api/test")
