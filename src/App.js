@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
   const [hello, setHello] = useState("");
+
   useEffect(() => {
     axios
       .get("http://localhost:8080/api/test")
@@ -24,7 +25,6 @@ function App() {
           <Route path="/mypage" element={<MyPage />}/>
         </Routes>
       </Router>
-      <SignUp />
     </>
   );
 }
