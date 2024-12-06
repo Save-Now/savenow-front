@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import SignUp from './component/SignUp';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
   const [hello, setHello] = useState("");
@@ -18,6 +19,11 @@ function App() {
 
   return (
     <>
+      <Router>
+        <Routes>
+          <Route path="/mypage" element={<MyPage />}/>
+        </Routes>
+      </Router>
       <SignUp />
     </>
   );
