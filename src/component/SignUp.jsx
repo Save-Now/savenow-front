@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useImmer } from 'use-immer';
 import axios from 'axios';
 
-// const BASE_URL = 'http://localhost:8080'
-const BASE_URL = "https://71c13204-cc41-4566-a89f-cf9b87467725.mock.pstmn.io" //mock서버
+const BASE_URL = 'http://localhost:8080'
+// const BASE_URL = "https://71c13204-cc41-4566-a89f-cf9b87467725.mock.pstmn.io" //mock서버
 
 const MSG = {
     noWarn: 'noWarn',
@@ -28,7 +28,7 @@ export default function SignUp() {
         passwordConfirm: '',
         username: '',
         birth: '',
-        gender: 'man',  // default 남자
+        gender: 'MALE',  // default 남자
         profileImg: '',
     });
     const [warnMsg, updateWarnMsg] = useImmer({
@@ -66,10 +66,11 @@ export default function SignUp() {
 
     // 유효성 검사
     useEffect(() => {
+        console.log(formData);
         validate();
     }, [formData])
 
-    const validate = () => {
+    const validate = async () => {
         let target;
         let value;
         if (focusRef.current) {
@@ -79,35 +80,40 @@ export default function SignUp() {
             target = '';
             value = '';
         }
-        if (target === 'gender')
+        if (target !== 'gender') {
             if (!checkRequired(target)) {
                 return;
             };
+        }
         switch (target) {
             case 'email':
             case 'username':
                 if (!checkPattern(target)) {
                     return;
                 } else {
-                    if (!checkDuplication(target)) {
+                    const isUnique = await(checkDuplication(target));
+                    if (!isUnique) {
+                        updateWarnMsg(draft => {
+                            draft[target] = MSG.noWarn;
+                        })  // 폼 제출 위해 임시삽입
                         return;
                     }
                 }
                 break;
-            case 'password':
-                if (!checkPattern(target)) {
-                    return;
+                case 'password':
+                    if (!checkPattern(target)) {
+                        return;
+                    }
+                    break;
+                    case 'passwordConfirm':
+                        if (!confirmPassword(value)) {
+                            return;
                 }
                 break;
-            case 'passwordConfirm':
-                if (!confirmPassword(value)) {
-                    return;
-                }
-                break;
-        }
-        updateWarnMsg(draft => {
-            draft[target] = MSG.noWarn;
-        })
+            }
+            updateWarnMsg(draft => {
+                draft[target] = MSG.noWarn;
+            })
     }
 
     // 필수 입력 여부 확인
@@ -183,8 +189,9 @@ export default function SignUp() {
             let params = {}
             if (name === 'email') params.email = formData.email;
             if (name === 'username') params.username = formData.username;
-            const response = await axios.get(`${BASE_URL}/api/join/userNa?${name}="${params[name]}"`);  //Todo: axios params 따옴표 인코딩
+            const response = await axios.get(`${BASE_URL}/api/join/?${name}="${params[name]}"`);  //Todo: axios params 따옴표 인코딩
             const message = response.data.message;
+            console.log('중복확인중...')
             if (message) {
                 if (message === 'duplication') {
                     updateWarnMsg(draft => {
@@ -201,26 +208,27 @@ export default function SignUp() {
             }
         } catch (error) {
             console.error('Error checking duplication: ', error.message);
+            return false;
         }
     }
 
     // 성별 checked 바꾸기
     const handleGenderChecked = (e) => {
-        if (e.target.value === 'man') {
+        if (e.target.value === '남자') {
             updateGender(draft => {
                 draft.man = !draft.man;
                 draft.woman = !draft.woman;
             })
             updateFormData(draft => {
-                draft.gender = 'man'
+                draft.gender = '남자'
             })
-        } else if (e.target.value === 'woman') {
+        } else if (e.target.value === '여자') {
             updateGender(draft => {
                 draft.man = !draft.man;
                 draft.woman = !draft.woman;
             })
             updateFormData(draft => {
-                draft.gender = 'woman'
+                draft.gender = '여자'
             })
         } else {
             console.log(e.target.value);
@@ -228,11 +236,27 @@ export default function SignUp() {
     }
 
     // Todo: 회원가입 데이터 post
-    const handleSubmit = async() => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         try {
+            const sendData = {
+                username: formData.username,
+                password: formData.password,
+                email: formData.email,
+                birth: formData.birth,
+                gender: formData.gender,
+            };
+            const response = await axios.post(`${BASE_URL}/api/join`, sendData);
+            const { message, data } = response.data;
 
+            if (message === "회원가입 성공") {
+                console.log(`signup success: ${data}`);
+                alert(`signup success: ${data}`);
+            } else {
+                console.log(`signup message error: ${message}`);
+            }
         } catch (error) {
-
+            console.error(`Error submitting signup data: ${error.message}`);
         }
     }
 
@@ -330,7 +354,7 @@ export default function SignUp() {
                                 <input
                                     type='radio'
                                     name='gender'
-                                    value='man'
+                                    value='MALE'
                                     checked={gender.man}
                                     onChange={handleValue}
                                     onClick={handleGenderChecked}
@@ -342,7 +366,7 @@ export default function SignUp() {
                                     className={styles.gender}
                                     type='radio'
                                     name='gender'
-                                    value='woman'
+                                    value='FEMALE'
                                     checked={gender.woman}
                                     onChange={handleValue}
                                     onClick={handleGenderChecked}
