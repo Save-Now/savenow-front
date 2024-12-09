@@ -7,7 +7,6 @@ import SignUp from "./pages/SignUp";
 import { ThemeProvider } from "styled-components";
 
 function App() {
-
   return (
     <>
       <ThemeProvider theme={theme}>
