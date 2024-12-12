@@ -321,4 +321,3 @@ export default function Login() {
       </KakaoButton>
     </LoginContainer>
   );
-}
