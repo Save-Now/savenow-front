@@ -1,9 +1,9 @@
-import styles from '../styles/signup.module.css';
+import styled from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 import { useImmer } from 'use-immer';
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080'
+const BASE_URL = 'http://localhost:8010'
 // const BASE_URL = "https://71c13204-cc41-4566-a89f-cf9b87467725.mock.pstmn.io" //mock서버
 
 const MSG = {
@@ -19,6 +19,173 @@ const MSG = {
 
 const EMAIL_REG = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
 const PWD_REG = /(?=.*[a-zA-Z])(?=.*[0-9]).{8,25}$/;
+
+const Container = styled.div`
+    background: white;
+    display: inline-block;
+    padding: 40px;
+    border-radius: 10px;
+    position: relative;
+    top: 40px;
+    left: 40px;
+`
+
+const Logo = styled.div`
+    width: 265px;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #555555;
+    color: #FFFFFF;
+    margin-bottom: 20px;
+`
+
+const LogoText = styled.p`
+    color: ${({ theme }) => theme.color.text};
+    font-weight: ${({ theme }) => theme.fontWeight.regular};
+    margin-bottom: 40px;
+`
+
+const Title = styled.p`
+    font-weight: ${({theme}) => theme.fontWeight.bold};
+    font-size: 30px;
+`
+
+const InputDiv = styled.div`
+    margin-top:20px;
+`
+
+const Input = styled.input`
+    position: relative;
+    margin-top: 10px;
+    border-radius: ${({ theme }) => theme.border.radius};
+    width: 484px;
+    height: 60px;
+    padding-left: 16px;
+    border: 1px solid #999999;
+    &:hover {
+        border-color: ${({ theme }) => theme.border.hoverColor};
+    };
+    &:focus {
+        border-color: ${({ theme }) => theme.border.focusColor};
+        outline: none;
+    };
+`
+const DateInput = styled(Input)`
+    &::-webkit-clear-button,
+    &::-webkit-inner-spin-button {
+        display: none;
+    };
+
+    &::-webkit-calendar-picker-indicator {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        color: transparent;
+    };
+`
+
+const FileBoxDiv = styled.div`
+    margin-top: 10px;
+    border: none;
+    display: flex;
+    align-items: center;
+`
+const FileBoxLabel = styled.label`
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    color: #FFFFF;
+    background-color: #999999;
+    cursor: pointer;
+    height: 40px;
+    width: 70px;
+    border-radius: ${({ theme }) => theme.border.radius};
+    &:hover {
+        background-color: ${({ theme }) => theme.color.hoverColor}; 
+    };
+    &:focus {
+        background-color: ${({ theme }) => theme.color.focusColor};
+    };
+`
+
+const UploadName = styled.input`
+    display: inline-block;
+    border: 1px solid #999999;
+    outline: none;
+    color: #999999;
+    height: 40px;
+    width: 200px;
+    border-radius: 10px;
+    padding-left: 10px;
+    margin-right: 10px;
+`
+
+const FileInputHidden = styled(Input)`
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+`
+const WarnMsg = styled.span`
+    display: inline-block;
+    height: 20px;
+    font-size: 12px;
+    color: red;
+    padding-left: 16px;
+`
+
+const GenderUl = styled.ul`
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+`
+
+const GenderLi = styled.li`
+    margin-top: 10px;
+    padding-left: 16px;
+    width: calc(500px - 16px);
+    height: 60px;
+    display: flex;
+    align-items: center;
+`
+
+const GenderLabel = styled.label`
+    margin-right: 16px;
+`
+
+const GenderInput = styled.input`
+    margin-right: 8px;
+`
+
+const Submit = styled.input`
+    margin-top: 46px;
+    width: 500px;
+    height: 60px;
+    border-radius: ${({ theme }) => theme.border.radius};
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #999999;
+    color: #FFFFFF;
+    &:hover {
+    background-color: ${props => props.$isActivated ? props.theme.color.hoverColor : '#999999'} 
+    };
+    &:focus {
+    background-color: ${props => props.$isActivated ? props.theme.color.focusColor : '#999999'}
+};
+`
+
+
 
 export default function SignUp() {
     // Todo: birth 필요
@@ -66,7 +233,6 @@ export default function SignUp() {
 
     // 유효성 검사
     useEffect(() => {
-        console.log(formData);
         validate();
     }, [formData])
 
@@ -81,9 +247,10 @@ export default function SignUp() {
             value = '';
         }
         if (target !== 'gender') {
-            if (!checkRequired(target)) {
+            const isRequired = await (checkRequired(target))
+            if (!isRequired) {
                 return;
-            };
+            }
         }
         switch (target) {
             case 'email':
@@ -91,33 +258,35 @@ export default function SignUp() {
                 if (!checkPattern(target)) {
                     return;
                 } else {
-                    const isUnique = await(checkDuplication(target));
+                    const isUnique = await (checkDuplication(target));
                     if (!isUnique) {
-                        updateWarnMsg(draft => {
-                            draft[target] = MSG.noWarn;
-                        })  // 폼 제출 위해 임시삽입
                         return;
                     }
                 }
                 break;
-                case 'password':
-                    if (!checkPattern(target)) {
-                        return;
-                    }
-                    break;
-                    case 'passwordConfirm':
-                        if (!confirmPassword(value)) {
-                            return;
+            case 'password':
+                if (!checkPattern(target)) {
+                    return;
                 }
                 break;
-            }
+            case 'passwordConfirm':
+                if (!confirmPassword(value)) {
+                    updateWarnMsg(draft => {
+                        draft[target] = MSG.usernamePattern;
+                    });
+                    return;
+                }
+                break;
+        }
+        if (value !== '') {
             updateWarnMsg(draft => {
                 draft[target] = MSG.noWarn;
             })
+        }
     }
 
     // 필수 입력 여부 확인
-    const checkRequired = (name) => {
+    const checkRequired = async (name) => {
         if (formData[name] === '') {
             updateWarnMsg(draft => {
                 draft[name] = MSG.required;
@@ -158,9 +327,6 @@ export default function SignUp() {
         if (name === 'username') {
             result = formData.username.length <= 25;
             if (!result) {
-                updateWarnMsg(draft => {
-                    draft[name] = MSG.usernamePattern;
-                });
                 return false;
             } else {
                 console.log('패턴확인 통과')
@@ -186,24 +352,31 @@ export default function SignUp() {
     // Todo: api 설계후 수정 예정
     const checkDuplication = async (name) => {
         try {
+            let url;
             let params = {}
-            if (name === 'email') params.email = formData.email;
-            if (name === 'username') params.username = formData.username;
-            const response = await axios.get(`${BASE_URL}/api/join/?${name}="${params[name]}"`);  //Todo: axios params 따옴표 인코딩
-            const message = response.data.message;
-            console.log('중복확인중...')
+            if (name === 'email') {
+                params.email = formData.email;
+                url = 'emailCheck';
+            }
+            if (name === 'username') {
+                params.username = formData.username;
+                url = 'usernameCheck';
+            }
+            const response = await axios.get(`${BASE_URL}/api/join/${url}`, { params });  //Todo: axios params 따옴표 인코딩
+            const message = response.data.msg;
+            // console.log(String(message));
             if (message) {
-                if (message === 'duplication') {
+                if (message === "닉네임 중복 검사 실패" || message === "이메일 중복 검사 실패") {
                     updateWarnMsg(draft => {
-                        draft[name] = name === 'email' ? MSG.emailDupli : MSG.usernameDupli;
+                        draft[name] = (name === 'email') ? MSG.emailDupli : MSG.usernameDupli;
                     })
                     return false;
-                } else if (message === 'not duplication') {
+                } else if (message === "닉네임 중복 검사 성공" || message === "이메일 중복 검사 성공") {
                     console.log('중복 통과');
                     return true;
                 }
             } else {
-                console.log(`no message: ${message}`);
+                console.log(`no message: ${message} `);
                 return false;
             }
         } catch (error) {
@@ -214,7 +387,7 @@ export default function SignUp() {
 
     // 성별 checked 바꾸기
     const handleGenderChecked = (e) => {
-        if (e.target.value === '남자') {
+        if (e.target.value === 'MALE') {
             updateGender(draft => {
                 draft.man = !draft.man;
                 draft.woman = !draft.woman;
@@ -222,7 +395,7 @@ export default function SignUp() {
             updateFormData(draft => {
                 draft.gender = '남자'
             })
-        } else if (e.target.value === '여자') {
+        } else if (e.target.value === 'FEMALE') {
             updateGender(draft => {
                 draft.man = !draft.man;
                 draft.woman = !draft.woman;
@@ -247,31 +420,56 @@ export default function SignUp() {
                 gender: formData.gender,
             };
             const response = await axios.post(`${BASE_URL}/api/join`, sendData);
-            const { message, data } = response.data;
+            const { msg } = response.data;
 
-            if (message === "회원가입 성공") {
-                console.log(`signup success: ${data}`);
-                alert(`signup success: ${data}`);
+            console.log(response.data)
+            if (msg === "회원가입 성공") {
+                console.log(`signup success: ${msg} `);
+                setIsActivated(false);
+                updateFormData((draft) => {
+                    draft = {
+                        email: '',
+                        password: '',
+                        passwordConfirm: '',
+                        username: '',
+                        birth: '',
+                        gender: 'MALE',  // default 남자
+                        profileImg: '',
+                    }
+                })
+                updateWarnMsg((draft) => {
+                    draft = {
+                        email: '',
+                        password: '',
+                        passwordConfirm: '',
+                        username: '',
+                        birth: '',
+                        profileImg: '',
+                        // gender는 default 값때메 제거
+                    }
+                })
+                alert(`signup success: ${msg} `);
             } else {
-                console.log(`signup message error: ${message}`);
+                console.log(`signup message error: ${msg} `);
             }
         } catch (error) {
-            console.error(`Error submitting signup data: ${error.message}`);
+            console.error(`Error submitting signup data: ${error} `);
         }
     }
 
+
     return (
-        <div className={styles.container}>
-            <div className={styles.logoBox}>
-                <div className={styles.logo}>LOGO</div>
-                <p className={styles.logoText}>소비습관을 기록하고, 개선하기 위한 서비스</p>
+        <Container>
+            <div>
+                <Logo>LOGO</Logo>
+                <LogoText>소비습관을 기록하고, 개선하기 위한 서비스</LogoText>
             </div>
-            <h1>SIGN UP</h1>
+            <Title>SIGN UP</Title>
             <form>
+                <InputDiv>
                 <label>
                     아이디<br />
-                    <input
-                        className={styles.input}
+                    <Input
                         type='email'
                         name='email'
                         required
@@ -279,15 +477,15 @@ export default function SignUp() {
                         onChange={handleValue}
                         placeholder='아이디를 입력해주세요.'
                     />
-                </label><br />
-                {warnMsg.email === MSG.required && <span className={styles.warnMsg}>{MSG.required}</span>}
-                {warnMsg.email === MSG.emailPattern && <span className={styles.warnMsg}>{MSG.emailPattern}</span>}
-                {warnMsg.email === MSG.emailDupli && <span className={styles.warnMsg}>{MSG.emailDupli}</span>}
-                <br />
+                </label>
+                </InputDiv>
+                {warnMsg.email === MSG.required && <WarnMsg>{MSG.required}</WarnMsg>}
+                {warnMsg.email === MSG.emailDupli && <WarnMsg>{MSG.emailDupli}</WarnMsg>}
+                {warnMsg.email === MSG.emailPattern && <WarnMsg>{MSG.emailPattern}</WarnMsg>}
+                <InputDiv>
                 <label>
                     비밀번호<br />
-                    <input
-                        className={styles.input}
+                    <Input
                         type='password'
                         name='password'
                         required
@@ -296,116 +494,117 @@ export default function SignUp() {
                         placeholder='비밀번호를 입력해주세요.'
                     />
                 </label>
-                <br />
-                {warnMsg.password === MSG.required && <span className={styles.warnMsg}>{MSG.required}</span>}
-                {warnMsg.password === MSG.pwdPattern && <span className={styles.warnMsg}>{MSG.pwdPattern}</span>}
-                <br />
-                <label>
-                    비밀번호 재확인<br />
-                    <input
-                        className={styles.input}
-                        type='password'
-                        name='passwordConfirm'
-                        required
-                        value={formData.passwordConfirm}
-                        onChange={handleValue}
-                        placeholder='비밀번호를 재입력해주세요.'
-                    />
-                </label>
-                <br />
-                {warnMsg.passwordConfirm === MSG.required && <span className={styles.warnMsg}>{MSG.required}</span>}
-                {warnMsg.passwordConfirm === MSG.pwdConfirm && <span className={styles.warnMsg}>{MSG.pwdConfirm}</span>}
-                <br />
-                <label>
-                    닉네임<br />
-                    <input
-                        className={styles.input}
-                        type='text'
-                        name='username'
-                        value={formData.username}
-                        onChange={handleValue}
-                        placeholder='닉네임을 입력해주세요.'
-                    />
-                </label>
-                <br />
-                {warnMsg.username === MSG.required && <span className={styles.warnMsg}>{MSG.required}</span>}
-                {warnMsg.username === MSG.usernameDupli && <span className={styles.warnMsg}>{MSG.usernameDupli}</span>}
-                {warnMsg.username === MSG.usernamePattern && <span className={styles.warnMsg}>{MSG.usernamePattern}</span>}
-                <br />
-                <label>
-                    생일<br />
-                    <input
-                        className={styles.input}
-                        type='date'
-                        name='birth'
-                        min='1940-01-01'
-                        max='2023-12-31'
-                        onChange={handleValue}
-                    />
-                </label>
-                <br />
-                {warnMsg.username === MSG.required && <span className={styles.warnMsg}>{MSG.required}</span>}
-                <br />
-                <label className={styles.gender}>
-                    성별<br />
-                    <ul>
-                        <li>
-                            <label>
-                                <input
-                                    type='radio'
-                                    name='gender'
-                                    value='MALE'
-                                    checked={gender.man}
-                                    onChange={handleValue}
-                                    onClick={handleGenderChecked}
-                                />
-                                남성
-                            </label>
-                            <label>
-                                <input
-                                    className={styles.gender}
-                                    type='radio'
-                                    name='gender'
-                                    value='FEMALE'
-                                    checked={gender.woman}
-                                    onChange={handleValue}
-                                    onClick={handleGenderChecked}
-                                />
-                                여성
-                            </label>
-                        </li>
-                    </ul>
-                </label><br />
-                <label className={styles.fileBox}> 프로필 이미지<br />
-                    <div className={styles.input}>
-                        <input
-                            className={styles.uploadName}
-                            value='첨부파일'
-                            placeholder='첨부파일'
-                            readOnly
+                </InputDiv>
+                {warnMsg.password === MSG.required && <WarnMsg>{MSG.required}</WarnMsg>}
+                {warnMsg.password === MSG.pwdPattern && <WarnMsg>{MSG.pwdPattern}</WarnMsg>}
+                <InputDiv>
+                    <label>
+                        비밀번호 재확인<br />
+                        <Input
+                            type='password'
+                            name='passwordConfirm'
+                            required
+                            value={formData.passwordConfirm}
+                            onChange={handleValue}
+                            placeholder='비밀번호를 재입력해주세요.'
                         />
-                        <label htmlFor='file'>파일찾기</label>
-                        <input
-                            type='file'
-                            id='file'
-                            accept='.jpg, .jpeg, .png'
-                            name='profileImg'
-                            value={formData.profileImg}
+                    </label>
+                </InputDiv>
+                {warnMsg.passwordConfirm === MSG.required && <WarnMsg>{MSG.required}</WarnMsg>}
+                {warnMsg.passwordConfirm === MSG.pwdConfirm && <WarnMsg>{MSG.pwdConfirm}</WarnMsg>}
+                <InputDiv>
+                    <label>
+                        닉네임<br />
+                        <Input
+                            type='text'
+                            name='username'
+                            value={formData.username}
+                            onChange={handleValue}
+                            placeholder='닉네임을 입력해주세요.'
+                        />
+                    </label>
+                </InputDiv>
+                {warnMsg.username === MSG.required && <WarnMsg>{MSG.required}</WarnMsg>}
+                {warnMsg.username === MSG.usernameDupli && <WarnMsg>{MSG.usernameDupli}</WarnMsg>}
+                {warnMsg.username === MSG.usernamePattern && <WarnMsg>{MSG.usernamePattern}</WarnMsg>}
+                <InputDiv>
+                    <label>
+                        생일<br />
+                        <DateInput
+                            type='date'
+                            name='birth'
+                            min='1940-01-01'
+                            max='2023-12-31'
                             onChange={handleValue}
                         />
-                    </div>
-                </label><br />
-                {warnMsg.profileImg === MSG.required && <span className={styles.warnMsg}>{MSG.emptyMsg}</span>}<br />
-                <input
-                    className={isActivated ? `${styles.submit} ${styles.active}` : `${styles.submit}`}
-                    type='submit'
-                    value='회원가입'
-                    readOnly
-                    onClick={handleSubmit}
-                    ref={submitRef}
-                />
+                    </label>
+                </InputDiv>
+                {warnMsg.birth === MSG.required && <WarnMsg>{MSG.required}</WarnMsg>}
+                <InputDiv>
+                    <label>
+                        성별<br />
+                        <GenderUl>
+                            <GenderLi>
+                                <GenderLabel>
+                                    <GenderInput
+                                        type='radio'
+                                        name='gender'
+                                        value='MALE'
+                                        checked={gender.man}
+                                        onChange={handleValue}
+                                        onClick={handleGenderChecked}
+                                    />
+                                    남성
+                                </GenderLabel>
+                                <GenderLabel>
+                                    <GenderInput
+                                        type='radio'
+                                        name='gender'
+                                        value='FEMALE'
+                                        checked={gender.woman}
+                                        onChange={handleValue}
+                                        onClick={handleGenderChecked}
+                                    />
+                                    여성
+                                </GenderLabel>
+                            </GenderLi>
+                        </GenderUl>
+                    </label>
+                </InputDiv>
+                <InputDiv>
+                    <label> 프로필 이미지<br />
+                        <FileBoxDiv>
+                            <UploadName
+                                value={formData.profileImg}
+                                placeholder='첨부파일'
+                                readOnly
+                            />
+                            <FileBoxLabel htmlFor='file'>파일찾기</FileBoxLabel>
+                            <FileInputHidden
+                                type='file'
+                                id='file'
+                                accept='.jpg, .jpeg, .png'
+                                name='profileImg'
+                                value={formData.profileImg}
+                                onChange={handleValue}
+                            />
+                        </FileBoxDiv>
+                    </label>
+                </InputDiv>
+                {warnMsg.profileImg === MSG.required && <WarnMsg>{MSG.emptyMsg}</WarnMsg>}
+                <InputDiv>
+                    <Submit
+                        $isActivated={isActivated}
+                        type='submit'
+                        value='회원가입'
+                        readOnly
+                        onClick={handleSubmit}
+                        ref={submitRef}
+                        disabled={!isActivated}
+                    />
+                </InputDiv>
             </form>
-        </div>
+        </Container>
     )
 
 }
