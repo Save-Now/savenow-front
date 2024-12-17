@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { BiGridAlt } from 'react-icons/bi';
-import { BsChatDots } from 'react-icons/bs';
-import { IoDocumentTextOutline } from 'react-icons/io5';
-import { BiTransfer } from 'react-icons/bi';
+import { FaRegCommentAlt } from "react-icons/fa";
+import { SlNotebook } from "react-icons/sl";
+import { MdOutlineLogout } from "react-icons/md";
 
 const SidebarContainer = styled.div`
   width: 240px;
@@ -100,8 +100,8 @@ export default function Sidebar() {
 
   const navItems = [
     { id: 'dashboard', icon: <BiGridAlt />, text: '대시보드' },
-    { id: 'community', icon: <BsChatDots />, text: '커뮤니티' },
-    { id: 'documents', icon: <IoDocumentTextOutline />, text: '가계부' },
+    { id: 'community', icon: <FaRegCommentAlt />, text: '커뮤니티' },
+    { id: 'documents', icon: <SlNotebook />, text: '가계부' },
   ];
 
   return (
@@ -129,7 +129,7 @@ export default function Sidebar() {
       {/* Bottom Section */}
       <BottomSection>
         <NavItem>
-          <Icon><BiTransfer /></Icon>
+          <Icon><MdOutlineLogout /></Icon>
           <NavText>로그아웃</NavText>
         </NavItem>
       </BottomSection>
