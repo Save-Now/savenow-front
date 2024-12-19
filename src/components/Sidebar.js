@@ -8,7 +8,7 @@ import { MdOutlineLogout } from "react-icons/md";
 const SidebarContainer = styled.div`
   width: 240px;
   height: 100vh;
-  background-color: #4158F3;
+  background-color: #4659E4;
   padding: 30px 20px 0px 20px;
   display: flex;
   flex-direction: column;
@@ -54,9 +54,9 @@ const LogoText = styled.span`
 
 const NavItem = styled.div`
   display: flex;
-  align-items: center; /* 세로 중앙 정렬 */
+  align-items: center;
   gap: 10px;
-  padding: 12px 8px; /* 내부 여백 */
+  padding: 12px 8px;
   color: ${props => (props.$active ? 'white' : '#d1d5db')};
   font-family: 'Pretendard', sans-serif;
   font-weight: ${props => (props.$active ? 'bold' : '400')};
