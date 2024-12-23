@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MyPage from "./pages/MyPage";
 import SignUp from "./pages/SignUp";
 import { ThemeProvider } from "styled-components";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
 
@@ -16,7 +17,8 @@ function App() {
             <Route path="/mypage" element={<MyPage />} />
           </Routes>
         </Router>
-        <SignUp />
+        {/* <SignUp /> */}
+        <Dashboard />
       </ThemeProvider>
     </>
   );
