@@ -1,35 +1,39 @@
 import { useEffect, useState } from "react";
 import CategoricalGraph from "./CategoricalGraph";
+import Calendar from "./Canlendar";
+import styled from "styled-components";
 
-const TODAY = new Date();
-const YEAR = TODAY.getFullYear();
-const MONTH = TODAY.getMonth();
-
+const DashboardContainer = styled.div`
+    border-radius: ${({ theme }) => theme.border.radius};
+    display: grid;
+    height: 638px;
+    width: 1141px;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: repeat(8, 1fr);
+    grid-gap: 10px;
+`
 
 export default function Dashboard() {
-    const [today, setToday] = useState(new Date());
-    const [year, setYear] = useState(new Date().getFullYear());
-    const [month, setMonth] = useState(new Date().getMonth());
-    const [day, setDay] = useState(new Date().getDate());
+    const [date, setDate] = useState(new Date());
 
-    /*
-    useEffect(() => {
-        console.log(today);
-        console.log(today.getFullYear());
-        console.log(today.getMonth());
-    }, []);
-    */
+    const handleDate = (date) => {
+        setDate(date);
+    }
 
     return (
-        <>
+        <DashboardContainer>
             <CategoricalGraph
-                date={{
-                    today: today,
-                    year: year,
-                    month: month,
-                    day: day,
-                }}
+                date={date}
             />
-        </>
+            <div className="report">
+            </div>
+            <div className="overview">
+            </div>
+            <Calendar
+                date={date}
+                onChange={handleDate}
+            />
+
+        </DashboardContainer>
     )
 }
