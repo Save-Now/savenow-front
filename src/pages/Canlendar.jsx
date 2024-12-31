@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Calendar as Cal } from "react-calendar";
 import styled from "styled-components";
 import 'react-calendar/dist/Calendar.css';
@@ -109,20 +109,15 @@ const Container = styled.div`
 const StyledCalendar = styled(Cal)``
 
 export default function Calendar({ date, onChange }) {
-    const monthRef = useRef(date.getMonth());
-
     const handleChangeDate = (date) => {
         onChange(date);
     }
 
-    // TODO: 수정필요
-    const neighborMonthsDisable = ({ date }) => {
-        return date.getMonth() !== monthRef.current;
+    const handleDisable = ({ activeStartDate, date, view }) => {
+        const month = date.getMonth()+1;
+        const activeMonth = activeStartDate.getMonth()+1;
+        return month !== activeMonth;
     }
-
-    useEffect(() => {
-        console.log(date.getMonth());
-    }, [date]);
 
     return (
         <Container>
@@ -132,7 +127,7 @@ export default function Calendar({ date, onChange }) {
                 next2Label={null}
                 prev2Label={null}
                 formatDay={(locale, date) => moment(date).format('D')}
-                tileDisabled={neighborMonthsDisable}
+                tileDisabled={handleDisable}
             />
         </Container>
     )
