@@ -23,7 +23,7 @@ export default function CategoricalGraph({ date }) {
 
     const getData = async () => {
         const response = await axios.get(`${BASE_URL}/api/records/categoricalSpending`);
-        console.log(typeof response.data);  //object(Array)
+        // console.log(typeof response.data);  //object(Array)
         const categoricalSpending = response.data;
         console.log(categoricalSpending)
         const temp = categoricalSpending.map(spend => {

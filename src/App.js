@@ -9,6 +9,7 @@ import Test from './pages/Test';
 import Dashboard from './pages/Dashboard';
 import { ThemeProvider } from "styled-components";
 import Dashboard from "./pages/Dashboard";
+import AccountBook from "./pages/AccountBook";
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
           </Routes>
         </Router>
         {/* <SignUp /> */}
-        <Dashboard />
+        {/* <Dashboard /> */}
+        <AccountBook />
       </ThemeProvider>
     </>
   );
