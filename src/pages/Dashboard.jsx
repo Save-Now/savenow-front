@@ -12,6 +12,14 @@ const DashboardContainer = styled.div`
     grid-template-rows: repeat(8, 1fr);
     grid-gap: 10px;
 `
+const CalendarWrapper = styled.div`
+    border-radius: ${({ theme }) => theme.border.radius};
+    grid-row-start: 2;
+    grid-row-end: 10;
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+`
 
 export default function Dashboard() {
     const [date, setDate] = useState(new Date());
@@ -29,10 +37,12 @@ export default function Dashboard() {
             </div>
             <div className="overview">
             </div>
-            <Calendar
-                date={date}
-                onChange={handleDate}
-            />
+            <CalendarWrapper>
+                <Calendar
+                    date={date}
+                    onChangeDate={() => handleDate()}
+                />
+            </CalendarWrapper>
 
         </DashboardContainer>
     )

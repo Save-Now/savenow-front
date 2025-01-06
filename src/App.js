@@ -6,6 +6,7 @@ import MyPage from "./pages/MyPage";
 import SignUp from "./pages/SignUp";
 import { ThemeProvider } from "styled-components";
 import Dashboard from "./pages/Dashboard";
+import AccountBook from "./pages/AccountBook";
 
 function App() {
 
@@ -18,7 +19,8 @@ function App() {
           </Routes>
         </Router>
         {/* <SignUp /> */}
-        <Dashboard />
+        {/* <Dashboard /> */}
+        <AccountBook />
       </ThemeProvider>
     </>
   );
