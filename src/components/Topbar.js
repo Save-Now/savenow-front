@@ -6,16 +6,21 @@ const TopBarContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
+  width: 1141px;
+  height: 72px;
+  padding: 20px;
+  border-radius: ${({ theme }) => theme.border.radius};
 `;
 
 const SearchBar = styled.div`
-  flex: 1;
-  max-width: 600px;
+  height: 72px;
+  width: 512px;
   position: relative;
   
   input {
     width: 100%;
+    hight: 100%;
     padding: 10px 40px 10px 15px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -31,6 +36,7 @@ const SearchBar = styled.div`
   }
 `;
 
+
 const UserProfile = styled.div`
   display: flex;
   align-items: center;
@@ -45,16 +51,23 @@ const UserProfile = styled.div`
     height: 32px;
     border-radius: 50%;
   }
-`;
+`
+
+const BellWrapper = styled.div`
+
+`
+  ;
 
 function TopBar() {
   return (
     <TopBarContainer>
       <SearchBar>
+        <Search size={20} style={{ position: 'absolute' }} />
         <input type="text" placeholder="검색..." />
-        <Search size={20} />
       </SearchBar>
-      <Bell size={20} style={{ margin: '0 20px' }} />
+      <BellWrapper>
+        <Bell size={20} style={{ margin: '0 20px' }} />
+      </BellWrapper>
       <UserProfile>
         <img src="/placeholder.svg" alt="User" />
         <div>

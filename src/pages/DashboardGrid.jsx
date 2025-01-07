@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import CategoricalGraph from "./CategoricalGraph";
 import Calendar from "./Canlendar";
 import styled from "styled-components";
+import Overview from "../components/Overview";
+import Topbar from "../components/Topbar";
 
 const DashboardContainer = styled.div`
     border-radius: ${({ theme }) => theme.border.radius};
@@ -21,22 +23,33 @@ const CalendarWrapper = styled.div`
     background: #FFFFFF;
 `
 
-export default function Dashboard() {
+const OverviewWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+`
+
+const financialData = {
+    mostUsedCategory: "쇼핑",
+    monthlyIncome: 1000000,
+    monthlyExpense: 100000
+  };
+
+export default function DashboardGrid() {
     const [date, setDate] = useState(new Date());
 
     const handleDate = (date) => {
         setDate(date);
     }
 
+
     return (
         <DashboardContainer>
             <CategoricalGraph
                 date={date}
             />
-            <div className="report">
-            </div>
-            <div className="overview">
-            </div>
+            <OverviewWrapper>
+                <Overview data={financialData} />
+            </OverviewWrapper>
             <CalendarWrapper>
                 <Calendar
                     date={date}

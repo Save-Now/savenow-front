@@ -25,19 +25,22 @@ export default function Calendar({ date, onChangeDate, markDays, data }) {
         const year = date.getFullYear();
         const month = date.getMonth() + 1;
         const day = date.getDate();
-        const result = markDays.indexOf(`${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`);
-        if (result !== -1) {
-            const thisDay = markDays[result];
-            return (
-                <Styled.MarkDiv>
-                    <br/>
-                    <Styled.Out>-{data[thisDay].out}</Styled.Out>
-                    <Styled.In>+{data[thisDay].in}</Styled.In>
-                </Styled.MarkDiv>
-            )
-        } else {
-            return;
+        if (markDays) {
+            const result = markDays.indexOf(`${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`);
+            if (result !== -1) {
+                const thisDay = markDays[result];
+                return (
+                    <Styled.MarkDiv>
+                        <br />
+                        <Styled.Out>-{data[thisDay].out}</Styled.Out>
+                        <Styled.In>+{data[thisDay].in}</Styled.In>
+                    </Styled.MarkDiv>
+                )
+            } else {
+                return;
+            }
         }
+
     }
 
     return (

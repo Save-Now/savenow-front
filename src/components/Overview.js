@@ -25,21 +25,20 @@ const Value = styled.div`
   align-items: baseline;
   gap: 4px;
 `;
-
 const Category = styled.span`
-  font-size: 28px;
+  font-size: ${({theme}) => theme.fontSize.large};
   font-weight: 700;
   color: #000;
 `;
 
 const Amount = styled.span`
-  font-size: 28px;
+  font-size: ${({theme}) => theme.fontSize.large};
   font-weight: 700;
   color: #000;
 `;
 
 const Currency = styled.span`
-  font-size: 20px;
+  font-size: ${({theme}) => theme.fontSize.large};
   font-weight: 400;
   color: #000;
 `;
