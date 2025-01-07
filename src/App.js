@@ -8,6 +8,9 @@ import Login from './pages/Login';
 import Test from './pages/Test';
 import Dashboard from './pages/Dashboard';
 import { ThemeProvider } from "styled-components";
+import Dashboard from "./pages/Dashboard";
+import AccountBook from "./pages/AccountBook";
+import MyAccountBook from "./pages/MyAccountBook";
 
 function App() {
   return (
@@ -21,7 +24,10 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </Router>
-        <SignUp />
+        {/* <SignUp /> */}
+        {/* <Dashboard /> */}
+        <AccountBook />
+        {/* <MyAccountBook /> */}
       </ThemeProvider>
     </>
   );
