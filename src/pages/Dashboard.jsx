@@ -40,7 +40,8 @@ export default function Dashboard() {
             <CalendarWrapper>
                 <Calendar
                     date={date}
-                    onChangeDate={() => handleDate()}
+                    onChangeDate={() => handleDate()
+                    }
                 />
             </CalendarWrapper>
 
