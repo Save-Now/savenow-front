@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import kakaoSymbol from "../assets/icons/kakaoSimbol.svg";
+import logoImage from '../assets/images/logo.png';
 import axios from 'axios';
 
 const LoginContainer = styled.div`
@@ -10,14 +11,26 @@ const LoginContainer = styled.div`
 `;
 
 const Logo = styled.div`
-  background-color: #666;
-  color: white;
-  padding: 10px;
-  font-size: 24px;
+  background-image: url(${logoImage});
+  background-size: cover;
+  background-position: center;
+  width: 55px;
+  height: 55px;
   margin-bottom: 20px;
-  display: inline-block;
-  min-width: 120px;
-  text-align: center;
+  border-radius: 10px;
+`;
+
+const LogoTitle = styled.div`
+  font-size: 0.9375rem; /* 폰트 크기 */
+  font-family: 'Pretendard', sans-serif; /* Pretendard 폰트 */
+  font-weight: bold; /* Bold 스타일 */
+  color: #333333; /* 텍스트 색상 */
+  margin-left: 10px; /* 로고와 텍스트 사이 간격 */
+`;
+
+const LogoContainer = styled.div`
+  display: flex; /* 로고와 텍스트를 가로로 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
 `;
 
 const Subtitle = styled.p`
@@ -268,7 +281,10 @@ export default function Login() {
 
   return (
     <LoginContainer>
-      <Logo>LOGO</Logo>
+      <LogoContainer>
+        <Logo />
+        <LogoTitle>Save Now</LogoTitle>
+      </LogoContainer>
       <Subtitle>소비 습관을 기록하고, 개선하기 위한 서비스</Subtitle>
 
       <Title>SIGN IN</Title>
