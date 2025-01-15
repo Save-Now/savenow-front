@@ -1,83 +1,115 @@
 import React from 'react';
-import { Search, Bell, Settings } from 'react-feather';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass, faBell } from '@fortawesome/free-solid-svg-icons';
+import { IoSettingsSharp } from 'react-icons/io5';
 
-const TopBarContainer = styled.div`
+const TopBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // margin-bottom: 20px;
-  width: 1141px;
-  height: 72px;
   padding: 20px;
-  border-radius: ${({ theme }) => theme.border.radius};
+  background-color: white;
+  border-radius: 12px;
+  margin-bottom: 40px;
 `;
 
-const SearchBar = styled.div`
-  height: 72px;
-  width: 512px;
+const SearchBarContainer = styled.div`
   position: relative;
-  
-  input {
-    width: 100%;
-    hight: 100%;
-    padding: 10px 40px 10px 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 14px;
-  }
+  width: 400px;
+`;
 
-  svg {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #666;
+const SearchBar = styled.input`
+  width: 100%;
+  height: 40px;
+  padding: 0 16px 0 40px;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+  &:focus {
+    outline: none;
+    border-color: #4659e4;
   }
 `;
 
+const SearchIcon = styled.div`
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+`;
+
+const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const NotificationIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
 
 const UserProfile = styled.div`
   display: flex;
   align-items: center;
-  gap: 15px;
-  background: #4F5AED;
   padding: 8px 16px;
-  border-radius: 20px;
+  background-color: #4659e4;
+  border-radius: 50px;
   color: white;
+  cursor: pointer;
+  min-width: 200px;
+`;
 
-  img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-  }
-`
+const ProfileContent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+`;
 
-const BellWrapper = styled.div`
+const SettingsIconContainer = styled.div`
+  margin-left: auto;
+`;
 
-`
-  ;
+const ProfileImageSmall = styled.div`
+  width: 32px;
+  height: 32px;
+  border-radius: 100px;
+  background-color: #e5e5e5;
+`;
 
-function TopBar() {
+const Topbar = () => {
   return (
-    <TopBarContainer>
-      <SearchBar>
-        <Search size={20} style={{ position: 'absolute' }} />
-        <input type="text" placeholder="검색..." />
-      </SearchBar>
-      <BellWrapper>
-        <Bell size={20} style={{ margin: '0 20px' }} />
-      </BellWrapper>
-      <UserProfile>
-        <img src="/placeholder.svg" alt="User" />
-        <div>
-          <div>John Doe</div>
-          <div>john123@example.com</div>
-        </div>
-        <Settings size={20} />
-      </UserProfile>
-    </TopBarContainer>
+    <TopBar>
+      <SearchBarContainer>
+        <SearchIcon>
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </SearchIcon>
+        <SearchBar placeholder="검색어를 입력하세요" />
+      </SearchBarContainer>
+      <UserInfo>
+        <NotificationIcon>
+          <FontAwesomeIcon icon={faBell} />
+        </NotificationIcon>
+        <UserProfile>
+          <ProfileContent>
+            <ProfileImageSmall />
+            <span>김수연</span>
+          </ProfileContent>
+          <SettingsIconContainer>
+            <IoSettingsSharp color="white" size={20} />
+          </SettingsIconContainer>
+        </UserProfile>
+      </UserInfo>
+    </TopBar>
   );
-}
+};
 
-export default TopBar;
+export default Topbar;

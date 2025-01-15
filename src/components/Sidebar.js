@@ -4,6 +4,7 @@ import { BiGridAlt } from 'react-icons/bi';
 import { FaRegCommentAlt } from "react-icons/fa";
 import { SlNotebook } from "react-icons/sl";
 import { MdOutlineLogout } from "react-icons/md";
+import logo from '../assets/images/logo.png';
 
 const SidebarContainer = styled.div`
   width: 240px;
@@ -37,8 +38,12 @@ const LogoPlaceholder = styled.div`
   width: 50px;
   height: 50px;
   background-color: rgba(255, 255, 255, 0.2);
+  background-image: url(${logo});
+  background-size: cover;
+  background-position: center;
   border-radius: 8px;
 `;
+
 
 const LogoText = styled.span`
   font-family: 'Pretendard', sans-serif;

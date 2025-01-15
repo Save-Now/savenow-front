@@ -1,71 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import { IoSettingsSharp } from "react-icons/io5";
-import { LayoutGrid, Users2, Wallet2, ChevronDown, LogOut } from "lucide-react";
-import { IoLogOutOutline } from "react-icons/io5";
+import Sidebar from "../components/Sidebar"
+import Topbar from "../components/Topbar";
 
 // 전체 레이아웃
 const Layout = styled.div`
   display: flex;
-  min-height: 100vh;
-`;
-
-// 사이드바
-const Sidebar = styled.div`
-  width: 240px;
-  background-color: #4659e4;
-  padding: 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-`;
-
-const MenuContainer = styled.div`
-  flex-grow: 1;
-`;
-
-const LogoutContainer = styled.div`
-  margin-top: auto;
-  padding-bottom: 20px;
-`;
-
-const Logo = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 40px;
-  img {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-  }
-  span {
-    font-size: 20px;
-    font-weight: bold;
-  }
-`;
-
-const MenuItem = styled.div`
-  padding: 12px;
-  margin: 4px 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 8px;
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-`;
-
-const MenuText = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  height: 100vh;
 `;
 
 // 메인 컨텐츠
@@ -75,87 +18,6 @@ const MainContent = styled.div`
   background-color: #f8f9fa;
 `;
 
-// 상단바
-const TopBar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  background-color: white;
-  border-radius: 12px;
-  margin-bottom: 40px;
-`;
-
-const SearchBarContainer = styled.div`
-  position: relative;
-  width: 400px;
-`;
-
-const SearchBar = styled.input`
-  width: 100%;
-  height: 40px;
-  padding: 0 16px 0 40px;
-  border: 1px solid #e5e5e5;
-  border-radius: 20px;
-  &:focus {
-    outline: none;
-    border-color: #4659e4;
-  }
-`;
-
-const SearchIcon = styled.div`
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #666;
-`;
-
-const UserInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
-
-const NotificationIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  background-color: #f8f9fa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-`;
-
-const UserProfile = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 8px 16px;
-  background-color: #4659e4;
-  border-radius: 50px;
-  color: white;
-  cursor: pointer;
-  min-width: 200px;
-`;
-
-const ProfileContent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-`;
-
-const SettingsIconContainer = styled.div`
-  margin-left: auto;
-`;
-
-const ProfileImageSmall = styled.div`
-  width: 32px;
-  height: 32px;
-  border-radius: 100px;
-  background-color: #e5e5e5;
-`;
 
 // 마이페이지 모드 스타일
 const ProfileSection = styled.div`
@@ -183,6 +45,7 @@ const EditProfileSection = styled.div`
   padding: 40px;
   background-color: white;
   border-radius: 12px;
+  height: 68vh;
 `;
 
 const SectionTitle = styled.h2`
@@ -283,8 +146,8 @@ const Input = styled.input`
 `;
 
 const EditButton = styled.button`
-  width: ${(props) => (props.inEditMode ? "100%" : "120px")};
-  height: 48px;
+  width: ${(props) => (props.inEditMode ? "100%" : "500px")};
+  height: 60px;
   background-color: ${(props) => (props.inEditMode ? "#999999" : "#4659e4")};
   color: white;
   border: none;
@@ -372,69 +235,11 @@ function MyPage() {
 
   return (
     <Layout>
-      <Sidebar>
-        <Logo>
-          <img src="/logo.png" alt="Save Now" />
-          <span>Save Now</span>
-        </Logo>
-
-        <MenuContainer>
-          <MenuItem>
-            <MenuText>
-              <LayoutGrid size={22} />
-              대시보드
-            </MenuText>
-          </MenuItem>
-
-          <MenuItem>
-            <MenuText>
-              <Users2 size={22} />
-              커뮤니티
-            </MenuText>
-          </MenuItem>
-
-          <MenuItem>
-            <MenuText>
-              <Wallet2 size={22} />
-              가계부
-            </MenuText>
-            <ChevronDown size={22} />
-          </MenuItem>
-        </MenuContainer>
-
-        <LogoutContainer>
-          <MenuItem>
-            <MenuText>
-              <IoLogOutOutline size={22} />
-              로그아웃
-            </MenuText>
-          </MenuItem>
-        </LogoutContainer>
-      </Sidebar>
+      <Sidebar />
 
       <MainContent>
-        <TopBar>
-          <SearchBarContainer>
-            <SearchIcon>
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </SearchIcon>
-            <SearchBar placeholder="검색어를 입력하세요" />
-          </SearchBarContainer>
-          <UserInfo>
-            <NotificationIcon>
-              <FontAwesomeIcon icon={faBell} />
-            </NotificationIcon>
-            <UserProfile>
-              <ProfileContent>
-                <ProfileImageSmall />
-                <span>김수연</span>
-              </ProfileContent>
-              <SettingsIconContainer>
-                <IoSettingsSharp color="white" size={20} />
-              </SettingsIconContainer>
-            </UserProfile>
-          </UserInfo>
-        </TopBar>
+      
+      <Topbar />
 
         {!isEditing ? (
           // 마이페이지 모드
